@@ -312,13 +312,13 @@ function testNumber() {
         //2진수 : 숫자 앞에 0b 를 붙인다
         let a = 0b00001111;
         let b = 15;
-        console.log(a===b);
+        console.log(a===b); //true
 
         //8진수 : ES5까지는 숫자 앞에 0을 붙였으나, 종종 헷갈리는 현상이 있어 ES6에서는 0o 를 붙이는것으로 변경
         let c_ = 017; // ES5
         let c = 0o17; // ES6
         let d = 15
-        console.log(c === d && c_===d );
+        console.log(c === d && c_===d ); //true
     }
     //test1();
 
@@ -326,8 +326,8 @@ function testNumber() {
     function test2(){
         let e = 17.0;
         let f = 1.2;
-        console.log(Number.isInteger(e));
-        console.log(Number.isInteger(f));
+        console.log(Number.isInteger(e)); //true
+        console.log(Number.isInteger(f)); //false
     }
     //test2();
 
@@ -338,13 +338,109 @@ function testNumber() {
         let c = "안녕하세요";
         let d = 12;
 
-        console.log(Number.isNaN(a));
-        console.log(Number.isNaN(b));
-        console.log(Number.isNaN(c));
-        console.log(Number.isNaN(d));
+        console.log("Number.isNaN"); //NaN인지 판단
+        console.log(Number.isNaN(a)); //false
+        console.log(Number.isNaN(b)); //true
+        console.log(Number.isNaN(c)); //false
+        console.log(Number.isNaN(d)); //false
+
+        console.log("전역 isNaN"); //숫자인지 판단
+        console.log(isNaN(b)); //true
+        console.log(isNaN(c)); //true
+        console.log(isNaN(a)); //true
+        console.log(isNaN(d)); //false
+
+    }
+    //test3();
+
+    //isFinite
+    function test4(){
+        console.log("Number.isFinite");
+        console.log(Number.isFinite(10));   //true
+        console.log(Number.isFinite(NaN));  //false
+        console.log(Number.isFinite(null)); //false
+        console.log(Number.isFinite([]));   //false
+
+        console.log("전역 isFinite");
+        console.log(isFinite(10));      //true
+        console.log(isFinite(NaN));     //false
+        console.log(isFinite(null));    //true
+        console.log(isFinite([]));      
+        console.log(0.1 + 0.2 === 0.3);
+    }
+    //test4();
+
+    //isSafeInteger 
+    //안전정수 IEEE754 규격에 맞게, 다른 정수로 반올림 하지 않아도 되는 숫자.
+    //수학적으로는  -((2의 53승)-1) ~ ((2의 53승)-1) 사이의 숫자.
+    function test5(){
+        let MAX = Number.MAX_SAFE_INTEGER; // ((2의 53승)-1)
+        let MIN = Number.MIN_SAFE_INTEGER; //-((2의 53승)-1)
+
+        console.log(Number.isSafeInteger(200));
+        
+        console.log(Number.isSafeInteger(MAX + 1));
+        console.log(Number.isSafeInteger(MIN - 1));
+    }
+    //test5();
+
+    //EPSILON
+    function test6(){
+        console.log(0.3 + 0.3 === 0.6); //true
+        console.log(1.2 - 0.7 === 0.5); //true
+        console.log(0.2 + 0.2 === 0.4); //true
+        console.log(0.1 + 0.2 === 0.3); //false
+        console.log(0.9 - 0.7 === 0.2); //false
+        console.log(0.9 - 0.8 === 0.1); //false
+
+        console.log("0.9 - 0.8 =", 0.9 - 0.8);
+        console.log("0.9 - 0.7 =", 0.9 - 0.7);
+        console.log("0.1 + 0.2 =", 0.1 + 0.2);
+
+        function epsilonEqual(a,b){
+            return Math.abs(a - b) < Number.EPSILON;
+        }
+
+        console.log(epsilonEqual(0.1 + 0.2, 0.3)); //true
+        console.log(epsilonEqual(0.9 - 0.8, 0.1)); //true
+    }
+    //test6();
+}
+
+function testString(){
+    //repeat
+    function test1(){
+        console.log("ㅋ".repeat(10));
+    }
+    //test1();
+
+    function test2(){
+        let str =  "다시 돌아올거라고 했잖아, 잠깐이면 될거라고 했잖아, 여기 서 있으라 말했었잖아. 거짓말 거짓말. 거짓말 - 이적 거짓말";
+        
+        console.log("includes-----------------");
+        console.log(str.includes("잠깐")); //true
+        console.log(str.includes("다시", 0)); //true
+        console.log(str.includes("다시", 2)); //false
+
+        console.log("startsWith-----------------");
+        console.log(str.startsWith("다시 돌아올거라고")); //true
+        console.log(str.startsWith("잠깐이면")); //false
+
+        console.log("endsWith-----------------");
+        console.log(str.endsWith("거짓말"));
+        console.log(str.endsWith("했잖아", 13)); //전체 문자열에서 찾아볼 마지막 글자의 index를 보내면 index까지만 검사함
+    }
+    //test2();
+
+    //normalize
+    function test3(){
+        let e1 = "\u00E9";  //é
+        let e2 = "e\u0301"; //é
+
+        console.log(e1 == e2); //false
+        console.log(e1.normalize() == e2.normalize()); //true
     }
     test3();
-    
 }
 
 document.onreadystatechange = function () {
@@ -382,7 +478,9 @@ document.onreadystatechange = function () {
          * 
          ***************/
         //Number 객체의 새 프로퍼티, 메소드
-        testNumber();
+        //testNumber();
 
+        //문자열
+        testString();
     }
 }
