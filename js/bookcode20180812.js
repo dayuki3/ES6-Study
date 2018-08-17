@@ -440,7 +440,39 @@ function testString(){
         console.log(e1 == e2); //false
         console.log(e1.normalize() == e2.normalize()); //true
     }
-    test3();
+    //test3();
+
+    function test4(){
+        let str = "안녕하냐!";
+        let strTemplate = `안녕하냐!`;
+
+        console.log(str === strTemplate); //true
+
+        let name = "철수";
+        let fruit = "사과";
+        let age1 = 20;
+        let age2 = 10;
+
+        //ES5 
+        console.log(name + "는 " + (age1 + age2 ) + "살 이고, " + fruit + "를 좋아해");
+        console.log(name + "\n" + (age1 + age2) + "\n" + fruit);
+        //ES6
+        console.log(`${name}는 ${age1 + age2}살 이고, ${fruit}를 좋아해`);
+        console.log(`${name}
+${age1 + age2}
+${fruit}`);
+    }
+    //test4();
+
+    function test5(){
+        let str1 = `첫 줄\n${1+1}번 째 줄`;
+        let str2 = String.raw `첫 줄\n${1+1}번 째 줄$`;
+        console.log(str1);
+        console.log(str2);
+    }
+    test5();
+
+    
 }
 
 document.onreadystatechange = function () {
