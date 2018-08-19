@@ -1,0 +1,38 @@
+body,
+p,
+div,
+ul,
+ol,
+li {
+    margin: 0;
+    padding: 0;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+.homework-container {
+    margin: 0;
+    padding: 10px 20px;
+}
+
+.input-result-area,
+.button-number,
+.input-range {
+    height: 40px;
+    vertical-align: top;
+    border: 1px solid #ccc;
+    background-color: #fff;
+}
+
+.input-result-area {
+    font-size: 18px;
+    padding: 6px;
+}
+
+.button-number {
+    font-size: 16px;
+    padding: 0 15px;
+    cursor: pointer;
+}
