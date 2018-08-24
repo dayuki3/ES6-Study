@@ -5,6 +5,8 @@ class Spinner{
         this.defaultValue = config.defaultValue;
         this.step = config.step;
         this.base = config.base;
+        this.min = config.min;
+        this.max = config.max;
     }
 
     addEvnet(){
@@ -13,8 +15,6 @@ class Spinner{
 
         this.buttonIncrease.addEventListener('click', this.increase.bind(this));
         this.buttonDecrease.addEventListener('click', this.decrease.bind(this));
-        
-        
     }
 
     getBaseNumber(resultArea){
@@ -44,27 +44,36 @@ class Spinner{
     increase(){
         let resultArea = document.querySelector(".input-result-area");
         let currentValue = this.getBaseNumber(resultArea);
-
-        resultArea.value = currentValue + this.step;
+        let result = currentValue + this.step;
+    
+        if (!this.isValid(result)){
+            return false;
+        }
+        
+        resultArea.value = result;
     }
 
     decrease() {
         let resultArea = document.querySelector(".input-result-area");
         let currentValue = this.getBaseNumber(resultArea);
+        let result = currentValue - this.step;
+    
+        if (!this.isValid(result)){
+            return false;
+        }
 
-        resultArea.value = currentValue - this.step;
+        resultArea.value = result;
     }
 
     render(){
         const wrapper = document.getElementById(this.id);
         wrapper.innerHTML = `
-            <input type="text" value="채팅을한다" placeholder="${this.defaultValue}" class="input-result-area">
+            <input type="text" placeholder="${this.defaultValue}" class="input-result-area">
             <button type="button" class="button-number button-number-increase">증가</button>
             <button type="button" class="button-number button-number-decrease">감소</button>
         `;
     }
 }
-
 
 document.onreadystatechange = function () {
     if (document.readyState == "interactive") {
@@ -81,7 +90,6 @@ document.onreadystatechange = function () {
         const spinner = new Spinner(config);
         spinner.render();
         spinner.addEvnet();
-
     }
 }
 
