@@ -466,13 +466,35 @@ ${fruit}`);
 
     function test5(){
         let str1 = `첫 줄\n${1+1}번 째 줄`;
-        let str2 = String.raw `첫 줄\n${1+1}번 째 줄$`;
+        let str2 = String.raw `첫 줄\n${1+1}번 째 줄$`; //입력 한 그대로의 글자를 보여줌
         console.log(str1);
         console.log(str2);
     }
-    test5();
+    //test5();
 
+    function test6(){
+        let arr1 = [1,2,3,4];
+        let arr2 = [1,2,3,4];
+        let arr3 = [1,2,3,4];
+        let arr4 = [1,2,3,4];
+        let arr5 = [1,2,3,4];
+
+        arr1.fill(0);       //[0, 0, 0, 0]
+        arr2.fill(0,1,2);   //[1, 0 ,3, 4]
+        arr3.fill(0,1,3);   //[1, 0, 0, 4]
+        arr4.fill(0,-3,2);  //[1, 0, 3, 4] == fill(0,4-3,2) 음수인 경우, 배열길이(4)-index
+        arr5.fill(0,0,-2);  //[0, 0, 3, 4] == fill(0,0,4-2)
+
+        for(let i = 1; i <6; i++){
+            console.log(eval("arr"+i));
+        }
+    }
+    //test6();
     
+    function test7(){
+        
+    }
+
 }
 
 document.onreadystatechange = function () {
