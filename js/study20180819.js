@@ -9,7 +9,8 @@ class Spinner{
         this.max = config.max;
     }
 
-    addEvnet(){
+    addEvent(){
+        //수정 필요 id받아오잖아!
         this.buttonIncrease = document.querySelector(".button-number-increase");
         this.buttonDecrease = document.querySelector(".button-number-decrease");
 
@@ -26,10 +27,7 @@ class Spinner{
 
     isValid(value) {
         //min, max 이내에 있는지 체크해서 true false 반환
-        const min = this.min;
-        const max = this.max;
-
-        if(value > max || value < min){
+        if(value > this.max || value < this.min){
             return false;
         }
 
@@ -47,19 +45,19 @@ class Spinner{
         let result = currentValue + this.step;
     
         if (!this.isValid(result)){
-            return false;
+            return ;
         }
         
         resultArea.value = result;
     }
 
     decrease() {
-        let resultArea = document.querySelector(".input-result-area");
+        let resultArea = document.querySelector(".input-result-area"); //dom에 접근하는 비용이 크니까 한번만 가져와서 재사용하도록하자
         let currentValue = this.getBaseNumber(resultArea);
         let result = currentValue - this.step;
     
         if (!this.isValid(result)){
-            return false;
+            return false; 
         }
 
         resultArea.value = result;
@@ -67,6 +65,7 @@ class Spinner{
 
     render(){
         const wrapper = document.getElementById(this.id);
+        
         wrapper.innerHTML = `
             <input type="text" placeholder="${this.defaultValue}" class="input-result-area">
             <button type="button" class="button-number button-number-increase">증가</button>
@@ -80,16 +79,18 @@ document.onreadystatechange = function () {
 
         const config = {
             id: "spinner",
-            defaultValue: "숫자를 증감시킵니다.",
-            step: 5,
+            defaultValue: "숫자를 증감시킵니다.",    //없으면 undefined
+            step: 5,                            //없으면 NaN
             base: 0,
-            min: -20,
-            max: 20
+            min: -20,                           //없으면 NaN
+            max: 20                             //없으면 NaN
         }
         
         const spinner = new Spinner(config);
+
+        //constructor 내에 포함 가능함. 실행 시점을 조작하고싶다면 이렇게 하는 경우도 있음.
         spinner.render();
-        spinner.addEvnet();
+        spinner.addEvent();
     }
 }
 
