@@ -47,7 +47,7 @@ class Spinner{
         if (!this.isValid(result)){
             return ;
         }
-        
+
         resultArea.value = result;
     }
 
@@ -85,7 +85,7 @@ document.onreadystatechange = function () {
             min: -20,                           //없으면 NaN
             max: 20                             //없으면 NaN
         }
-        
+
         const spinner = new Spinner(config);
 
         //constructor 내에 포함 가능함. 실행 시점을 조작하고싶다면 이렇게 하는 경우도 있음.
