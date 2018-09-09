@@ -491,10 +491,110 @@ ${fruit}`);
     }
     //test6();
     
-    function test7(){
+    function test7(){ 
+        var x=12; //find 메소드 내에서 this 값으로 활용됨
+        var arr = [11,12,13]; //arr는 value가 되어 배열 길이만큼 주어진 function을 돈다
+        
+        var result = arr.find(function(value){
+            if(value == this){
+                return true; // 해당하는 value를 반환한다.
+            }
+        }, x);
+
+        var result2 = arr.findIndex(function(value){
+            if(value == this){
+                return true; // 해당하는 value를 반환한다.
+            }
+        }, x);
+
+        var findString = function(array, targetString){
+            //이렇게 직접 만들수도 있고, 이 편이 index와 값, boolean중에 골라서 보낼 수 있지않나..?
+            //find, findIndex를 써야하지? -ㅅ-;
+            for(var i = 0; i < array.length; i++){
+                if(array[i] == targetString){
+                    //return true;
+                    //return array[i];  // 2
+                    return [i, array[i]]; 
+                }
+            }
+        };
+        var result3 = findString(arr, x);
+
+        console.log(result); // 12 (value)
+        console.log(result2); // 1 (index)
+        console.log(result3); // 1, 12 (index, value)
+    }
+    //test7();
+
+    function test8 (){
+        let arr = [1, 2, 3, 4, 5];
+
+        console.log(arr.copyWithin(1, 2, 4));
+
+        //세번 째 인자를 비워두면 (array.length - 1)이 default = (1, 2, 4) 이어야할 것 같은데.. 왜 값이 다르게 나오지
+        console.log(arr.copyWithin(1, 2));
+
+        // start, endIndex가 음수면 (array.length + (-index)) = (1, 3, 4)
+        console.log(arr.copyWithin(1, -2, -1));
+
+        console.log(arr.copyWithin(0, 0, 5));
+
+        console.log(arr.length);
+
+    }
+    //test8();
+
+    function test9(){
+        let arr = ["가", "나", "다"];
+
+        let entries = arr.entries();
+        let values = arr.values();
+        let keys = arr.keys();
+
+        console.log(...entries);
+        console.log(...values);
+        console.log(...keys);
+    }
+    //test9();
+
+    function test10(){
+        let set = new Set("안녕하세요!!!");
+
+        console.log(set);
+        console.log(set.has("녕"));
+
+        console.log(set.size);
+        set.add(12);
+        console.log(set.size);
+        set.delete("안");
+        console.log(set);
+        
+        set.clear();
+    }
+    //test10();
+
+    function test11(){
+        let map = new Map();
+
+        let o = {n:1};
+        console.log(o);
+
+        map.set(o,"A");
+        map.set("2", 9);
+        console.log(map);
+
+        console.log(map.has("2"));
+        console.log(map.get(o));
+        map.clear();
+
+        let map_1 = new Map([[1,2],[4,5]]);
+        console.log(map_1.size);
+    }
+    //test11();
+
+    function test12(){
         
     }
-
 }
 
 document.onreadystatechange = function () {
