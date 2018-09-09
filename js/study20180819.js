@@ -25,6 +25,27 @@ class Spinner {
     addEvent() {
         this.buttonIncrease.addEventListener('click', this.increase.bind(this));
         this.buttonDecrease.addEventListener('click', this.decrease.bind(this));
+
+        // document.onkeydown = function(e) {
+        //     switch (e.keyCode) {
+        //         case 37:
+        //             //left
+        //             this.decrease.bind(this);
+        //             break;
+        //         case 38:
+        //             //up
+        //             this.increase.bind(this);
+        //             break;
+        //         case 39:
+        //             //right
+        //             this.increase.bind(this);
+        //             break;
+        //         case 40:
+        //             //down
+        //             this.decrease.bind(this);
+        //             break;
+        //     }
+        // };
     }
 
     getBaseNumber(resultArea) {
@@ -34,44 +55,56 @@ class Spinner {
         return currentValue;
     }
 
-    isValidIncreasedValue(value) {
-        //max값이 있으면 max이상 넘어갈 수 없다. max가 없으면 infinite 
-        if (!this.max) return true;
-
-        if (value <= this.max) { 
-            return true;
-        }
+    updateInputValue(result) {
+        this.resultArea.value = result;
     }
-
-    isValidDecreasedValue(value) {
-        //min값이 있으면 min이하로 내려갈 수 없다. min이 없으면 infinite 
-        if (!this.min) return true;
-
-        if (value >= this.min) {
-            return true;
-        }
-    }
-
     increase() {
         let currentValue = this.getBaseNumber(this.resultArea);
         let result = currentValue + this.step;
 
-        if (!this.isValidIncreasedValue(result)) {
-            return;
-        }
+        if (this.max){
+            //currentValue가 max보다 크면 동작하지않는다
+            if (currentValue >= this.max) { 
+                return false;
+            }
 
-        this.resultArea.value = result;
+            //currentValue + step이 max를 넘어가면 max값을 반영한다.
+            if (currentValue < this.max && result > this.max){
+                result = this.max;
+            }
+
+            //최소값보다 작은 value일 때 증가 버튼을 누르면 최소값을 반환한다.
+            if (currentValue < this.min && this.min){
+                result = this.min;
+            }
+
+        }
+        
+        this.updateInputValue(result);
     }
 
     decrease() {
         let currentValue = this.getBaseNumber(this.resultArea);
         let result = currentValue - this.step;
 
-        if (!this.isValidDecreasedValue(result)) {
-            return false;
+        if (this.min){
+            //currentValue가 min보다 작으면 동작하지않는다
+            if (currentValue <= this.min) { 
+                return false;
+            }
+
+            //currentValue - step이 min보다 작아지면 min값을 반영한다.
+            if (currentValue > this.min && result < this.min){
+                result = this.min;
+            }
+
+            //최대값보다 큰 value일 때 감소 버튼을 누르면 최대값을 반환한다.
+            if (currentValue > this.max && this.max){
+                result = this.max;
+            }
         }
 
-        this.resultArea.value = result;
+        this.updateInputValue(result);
     }
 
     render() {
