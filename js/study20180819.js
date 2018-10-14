@@ -20,32 +20,36 @@ class Spinner {
         this.resultArea = document.querySelector(".input-result-area");
 
         this.addEvent();
+        this.checkKeyInput();
     }
 
     addEvent() {
         this.buttonIncrease.addEventListener('click', this.increase.bind(this));
         this.buttonDecrease.addEventListener('click', this.decrease.bind(this));
+    }
 
-        // document.onkeydown = function(e) {
-        //     switch (e.keyCode) {
-        //         case 37:
-        //             //left
-        //             this.decrease.bind(this);
-        //             break;
-        //         case 38:
-        //             //up
-        //             this.increase.bind(this);
-        //             break;
-        //         case 39:
-        //             //right
-        //             this.increase.bind(this);
-        //             break;
-        //         case 40:
-        //             //down
-        //             this.decrease.bind(this);
-        //             break;
-        //     }
-        // };
+    checkKeyInput() {
+        let self = this;
+        document.onkeyup = function (e) {
+            self.arrowKeyEvent(e);
+            self.remainNumeric();
+        }
+    }
+    arrowKeyEvent(e) {
+        let self = this;
+        switch (e.keyCode) {
+            case 38://up
+                self.increase();
+                break;
+            case 40://down
+                self.decrease();
+                break;
+        }
+    }
+
+    remainNumeric() { 
+        let result = this.resultArea.value.replace(/[^-0-9]/g, '');
+        this.updateInputValue(result);
     }
 
     getBaseNumber(resultArea) {
@@ -62,24 +66,26 @@ class Spinner {
         let currentValue = this.getBaseNumber(this.resultArea);
         let result = currentValue + this.step;
 
-        if (this.max){
+        result = this.returnStepedResult(result);
+
+        if (this.max) {
             //currentValue가 max보다 크면 동작하지않는다
-            if (currentValue >= this.max) { 
+            if (currentValue >= this.max) {
                 return false;
             }
 
             //currentValue + step이 max를 넘어가면 max값을 반영한다.
-            if (currentValue < this.max && result > this.max){
+            if (currentValue < this.max && result > this.max) {
                 result = this.max;
             }
 
             //최소값보다 작은 value일 때 증가 버튼을 누르면 최소값을 반환한다.
-            if (currentValue < this.min && this.min){
+            if (currentValue < this.min && this.min) {
                 result = this.min;
             }
 
         }
-        
+
         this.updateInputValue(result);
     }
 
@@ -87,25 +93,39 @@ class Spinner {
         let currentValue = this.getBaseNumber(this.resultArea);
         let result = currentValue - this.step;
 
-        if (this.min){
+        result = this.returnStepedResult(result);
+
+        if (this.min) {
             //currentValue가 min보다 작으면 동작하지않는다
-            if (currentValue <= this.min) { 
+            if (currentValue <= this.min) {
                 return false;
             }
 
             //currentValue - step이 min보다 작아지면 min값을 반영한다.
-            if (currentValue > this.min && result < this.min){
+            if (currentValue > this.min && result < this.min) {
                 result = this.min;
             }
 
             //최대값보다 큰 value일 때 감소 버튼을 누르면 최대값을 반환한다.
-            if (currentValue > this.max && this.max){
+            if (currentValue > this.max && this.max) {
                 result = this.max;
             }
         }
 
         this.updateInputValue(result);
     }
+
+    returnStepedResult(result) {
+        let restOfResult = result % this.step;
+
+        //result를 step으로 나눴을 때 나누어 떨어지지 않으면 나머지만큼 뺀 값을 반환한다. 
+        if (restOfResult !== 0) {
+            result = result - restOfResult;
+        }
+
+        return result
+    }
+
 
     render() {
         const wrapper = document.getElementById(this.id);
@@ -126,8 +146,8 @@ document.onreadystatechange = function () {
             defaultValue: "숫자를 증감시킵니다.",
             step: 5,
             base: 0,
-            min: -20,
-            max: 20
+            min: -100,
+            max: 100
         }
 
         const spinner = new Spinner(config);
