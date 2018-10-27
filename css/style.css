@@ -19,7 +19,8 @@ li {
 
 .input-result-area,
 .button-number,
-.input-range {
+.input-range,
+.button-destroy {
     height: 40px;
     vertical-align: top;
     border: 1px solid #ccc;
@@ -35,4 +36,8 @@ li {
     font-size: 16px;
     padding: 0 15px;
     cursor: pointer;
+}
+
+.button-destroy {
+    margin-top: 20px;
 }
