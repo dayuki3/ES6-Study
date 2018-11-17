@@ -164,10 +164,11 @@ document.onreadystatechange = function () {
 
         const spinner2 = new Spinner({
             id: "spinner1",
-            defaultValue: "전설 바보",
+            defaultValue: "현미언니 바보ㅋㅋㅋ",
             step: 5,
             base: -10
         })
     }
 }
 
+export default Spinner
