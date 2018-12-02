@@ -104,7 +104,7 @@ describe("Spinner Test", () => {
 
         it("최대값이 설정되어있으면 그 초과값으로 증가할 수 없다.", () => {
             //given
-            const config = { id: "spinner", base: 8, max: 10, step: 5}
+            const config = { id: "spinner", base: 0, max: 10, step: 5}
             const spinner = new Spinner(config);
             jest.mock('../study20180819', () => {
                 return jest.fn().mockImplementation(() => {
@@ -114,14 +114,16 @@ describe("Spinner Test", () => {
 
             //when
             spinner.increase();
+            spinner.updateInputValue(10);
 
             //then
             expect(mockfunction).not.toHaveBeenCalled();
+            expect(getEl(".input-result-area").value).toEqual("10");
         });
 
         it("최소값이 설정되어있으면 그 미만으로 감소할 수 없다", () => {
             //given
-            const config = { id: "spinner", base: -10, min: -10, step: 5}
+            const config = { id: "spinner", base: 0, min: -10, step: 5}
             const spinner = new Spinner(config);
 
             jest.mock('../study20180819', () => {
@@ -131,10 +133,12 @@ describe("Spinner Test", () => {
             });
 
             //when
+            spinner.updateInputValue(-10);
             spinner.decrease();
 
             //then 
             expect(mockfunction).not.toHaveBeenCalled();
+            expect(getEl(".input-result-area").value).toEqual("-10");
         });
 
         it("최소값이 설정되어있으면 그보다 낮은 숫자를 입력하고 증가 동작했을 때 최소값으로 바꿔준다.", () => {
