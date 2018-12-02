@@ -74,9 +74,9 @@ class Spinner {
         this._currentValue = result;
         this.resultArea.value = this._currentValue;
     }
+
     increase() {
         let result = this._currentValue + this.step;
-
         result = this.returnStepedResult(result);
 
         if (this.max) {
@@ -89,12 +89,12 @@ class Spinner {
             if (this._currentValue < this.max && result > this.max) {
                 result = this.max;
             }
-
+        }
+        if (this.min) {
             //최소값보다 작은 value일 때 증가 버튼을 누르면 최소값을 반환한다.
             if (this._currentValue < this.min && this.min) {
                 result = this.min;
             }
-
         }
 
         this.updateInputValue(result);
@@ -115,7 +115,9 @@ class Spinner {
             if (this._currentValue > this.min && result < this.min) {
                 result = this.min;
             }
+        }
 
+        if (this.max) {
             //최대값보다 큰 value일 때 감소 버튼을 누르면 최대값을 반환한다.
             if (this._currentValue > this.max && this.max) {
                 result = this.max;
@@ -162,13 +164,8 @@ document.onreadystatechange = function () {
 
         const spinner = new Spinner(config);
 
-        const spinner2 = new Spinner({
-            id: "spinner1",
-            defaultValue: "현미언니 바보ㅋㅋㅋ",
-            step: 5,
-            base: -10
-        })
+        const spinner2 = new Spinner({id: "spinner1", base:0, step: 5, max: 100, min: -100})
     }
 };
 
-//export default Spinner
+export default Spinner

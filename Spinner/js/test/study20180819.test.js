@@ -18,27 +18,38 @@ describe("Spinner Test", () => {
     });
 
     describe("셋팅값 없는 경우의 초기화 테스트", () =>{
-
-        it("spinner 초기화시 기본셋팅에 step이 없다면 증가 버튼 클릭시 1씩 증가한다", () => {
+        it("기본셋팅에 base가 없다면 증가 버튼 클릭시 0 + step 값을 리턴한다. ", () => {
             //given
-            const config = { id: "spinner" }
+            const config = { id: "spinner", step: 2 }
             const spinner = new Spinner(config);
-    
+
             //when
             spinner.increase();
-    
+
+            //then
+            expect(getEl(".input-result-area").value).toBe("2");
+        });
+
+        it("기본셋팅에 step이 없다면 증가 버튼 클릭시 base + 1 인 값을 리턴한다", () => {
+            //given
+            const config = { id: "spinner", base: 0 }
+            const spinner = new Spinner(config);
+
+            //when
+            spinner.increase();
+
             //then
             expect(getEl(".input-result-area").value).toBe("1");
         });
 
-        it("spinner 초기화시 기본셋팅에 step이 없다면 감소 버튼 클릭시 1씩 감소한다", () => {
+        it("기본셋팅에 step이 없다면 감소 버튼 클릭시 base - 1 인 값을 리턴한다", () => {
             //given
-            const config = { id: "spinner" }
+            const config = { id: "spinner", base: 0 }
             const spinner = new Spinner(config);
-    
+
             //when
             spinner.decrease();
-    
+
             //then
             expect(getEl(".input-result-area").value).toBe("-1");
         });
@@ -46,8 +57,11 @@ describe("Spinner Test", () => {
     });
 
     describe("기능 테스트 ", () => {
+        beforeEach(() => {
+            const mockfunction = jest.fn();
+        });
 
-        afterEach(()=>{
+        afterEach(() => {
             mockfunction.mockClear();
         });
 
@@ -57,18 +71,11 @@ describe("Spinner Test", () => {
             const spinner = new Spinner(config);
             const buttonIncrease = getEl(".button-number-increase");
 
-            jest.mock('../study20180819', () => {
-                return jest.fn().mockImplementation(() => {
-                    return {increase: mockfunction};
-                });
-            });
-
             //when
-            buttonIncrease.click();
+            buttonIncrease.click(); 
 
             //then
-            expect(getEl(".input-result-area").value).toBe("1");
-            expect(mockfunction.mock.calls.length).toBe(1);
+            expect(getEl(".input-result-area").value).toEqual("1");
         });
 
         it("값을 입력하지 않은 상태에서 증가버튼을 누르면 base + step 값을 반환한다", () => {
@@ -131,24 +138,118 @@ describe("Spinner Test", () => {
         });
 
         it("최소값이 설정되어있으면 그보다 낮은 숫자를 입력하고 증가 동작했을 때 최소값으로 바꿔준다.", () => {
-            
+            //given
+            const config = {id: "spinner", base: -100, min: -10, step: 5}
+            const spinner = new Spinner(config);
+
+            //when
+            spinner.increase();
+
+            //then
+            expect(getEl(".input-result-area").value).toEqual("-10");
         })
 
+        it("증가 동작시 Input 값 + step이 최대 범위를 벗어나는 경우, 최대값으로 바꿔준다 ",() => {
+            //given
+            const config = {id: "spinner", base: 99, step: 5, max: 100, min: -100}
+            const spinner = new Spinner(config);
 
+            //when
+            spinner.increase();
+
+            //then
+            expect(getEl(".input-result-area").value).toEqual("100");
+        });
+
+        it("감소 동작시 Input 값 - step이 최소 범위를 벗어나는 경우, 최소값으로 바꿔준다 ",() => {
+            //given
+            const config = {id: "spinner", base: -99, step: 5, max: 100, min: -100}
+            const spinner = new Spinner(config);
+
+            //when
+            spinner.decrease();
+
+            //then
+            expect(getEl(".input-result-area").value).toEqual("-100");
+        });
+
+        it("최소값보다 작은 수를 입력한 경우 증가 버튼 동작시 최소값으로 변경",() => {
+            //given
+            const config = {id: "spinner", base:0, step: 5, max: 100, min: -100}
+            const spinner = new Spinner(config);
+
+            //when
+            spinner.updateInputValue(-1000);
+            spinner.increase();
+
+            //then
+            expect(getEl(".input-result-area").value).toEqual("-100");
+        });
+
+        it("최소값보다 작은 수를 입력한 경우 감소 버튼 동작시 반응 없음 ",() => {
+            //given
+            const config = {id: "spinner", base:0, step: 5, max: 100, min: -100}
+            const spinner = new Spinner(config);
+
+            //when
+            spinner.updateInputValue(-1000);
+            spinner.decrease();
+
+            //then
+            expect(getEl(".input-result-area").value).toEqual("-1000");
+        });
+
+        it("최대값보다 큰 수를 입력한 경우 감소 버튼 동작시 최대값으로 변경",() => {
+            //given
+            const config = {id: "spinner", base:0, step: 5, max: 100, min: -100}
+            const spinner = new Spinner(config);
+
+            //when
+            spinner.updateInputValue(1000);
+            spinner.decrease();
+
+            //then
+            expect(getEl(".input-result-area").value).toEqual("100");
+        });
+
+        it("최대값보다 큰 수를 입력한 경우 증가 버튼 동작시 반응 없음",() => {
+            //given
+            const config = {id: "spinner", base:0, step: 5, max: 100, min: -100}
+            const spinner = new Spinner(config);
+
+            //when
+            spinner.updateInputValue(1000);
+            spinner.increase();
+
+            //then
+            expect(getEl(".input-result-area").value).toEqual("1000");
+        });
+
+        it("Input 값이 step에 맞지 않을 경우, 버튼 동작에 따른 유효한 숫자를 반환한다.",() => {
+            //given
+            const config = {id: "spinner", base:0, step: 3}
+            const spinner = new Spinner(config);
+
+            //when
+            spinner.updateInputValue(8);
+            spinner.increase();
+
+            //then
+            expect(getEl(".input-result-area").value).toEqual("9");
+        });
+
+        it("Destroy 실행 후 클릭에 반응하지 않아야한다",() => {
+            //given
+            const config = {id: "spinner"}
+            const spinner = new Spinner(config);;
+            const buttonIncrease = getEl(".button-number-increase");
+
+            //when
+            spinner.destroy();
+            buttonIncrease.click(); 
+
+            //then
+            expect(getEl(".input-result-area").value).toEqual("");
+        });
     });
-
-    
-
 });
-
-/*
-- [x] 최소값이 지정되어있으면 그보다 낮은 숫자를 입력하고 증가 동작했을 때 최소값으로 바꿔준다.
-- [x] Input 값 +/- step이 최대/최소 범위를 벗어나는 경우, 최소/최대값으로 바꿔준다 
-- [x] 최소값보다 작은 수를 입력한 경우 증가 버튼 동작시 최소값으로 변경, 감소 버튼시 반응 없음
-- [x] 최대값보다 큰 수를 입력한 경우 증가 버튼 반응 없고, 감소 버튼시 최대값으로 변경
-- [x] Destroy 구현 필요
-- [x] 키보드 up/down 에 반응해야한다
-- [x] 글자를 입력할 수 없다
-- [x] Input 값이 step에 맞지 않을 경우, 버튼 동작에 따른 유효한 증/감 숫자를 반환한다.
-- [x] 플레이스 홀더 노출/미노출은 브라우저 기본 스펙을 따른다. 
-*/
