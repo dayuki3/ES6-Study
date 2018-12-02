@@ -155,7 +155,7 @@ document.onreadystatechange = function () {
             id: "spinner",
             defaultValue: "숫자를 증감시킵니다.",
             step: 5,
-            base: 10,
+            base: 0,
             min: -100,
             max: 100
         }
@@ -169,6 +169,6 @@ document.onreadystatechange = function () {
             base: -10
         })
     }
-}
+};
 
-export default Spinner
+//export default Spinner
