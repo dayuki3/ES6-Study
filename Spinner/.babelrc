@@ -8,5 +8,6 @@
         "test": {
             "presets": ["@babel/preset-env"]
         }
-    }
+    },
+    "ignore": ["**/__tests__/**"]
 }
